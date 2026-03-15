@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
-    <description>Smoke test for Jenkins2 login page reachability</description>
-    <name>TC_Jenkins2_Login_Reachable</name>
-    <tag>smoke</tag>
-    <comment></comment>
-    <recordOption>OTHER</recordOption>
-    <testCaseGuid>33333333-3333-3333-3333-333333333333</testCaseGuid>
+   <description></description>
+   <name>TC_Jenkins2_Login_Reachable</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>f38ef6f3-3703-47fd-afdc-b8e9689a11b6</testCaseGuid>
 </TestCaseEntity>

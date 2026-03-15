@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Smoke" time="1.127" tests="1" failures="0" errors="0">
+   <testsuite name="Smoke" tests="1" failures="0" errors="0" time="1.127" skipped="0" timestamp="2026-03-15T20:57:11.829Z" hostname="dmasl - host.docker.internal" id="Test Suites/Smoke">
+      <properties>
+         <property name="deviceName" value=""/>
+         <property name="devicePlatform"/>
+         <property name="logFolder" value="C:\\Users\\dmasl\\Katalon Studio\\jenkins\\Reports\\20260315_145707\\Smoke\\20260315_145707"/>
+         <property name="logFiles" value="C:\\Users\\dmasl\\Katalon Studio\\jenkins\\Reports\\20260315_145707\\Smoke\\20260315_145707\\console0.log, C:\\Users\\dmasl\\Katalon Studio\\jenkins\\Reports\\20260315_145707\\Smoke\\20260315_145707\\execution0.log"/>
+         <property name="attachments" value=""/>
+         <property name="userFullName" value="Emergingtechnology"/>
+         <property name="hostName" value="dmasl - host.docker.internal"/>
+         <property name="hostAddress" value="10.0.0.248"/>
+         <property name="projectName" value="jenkins"/>
+         <property name="os" value="Windows 11 64bit"/>
+         <property name="katalonVersion" value="10.4.3.0"/>
+      </properties>
+      <testcase name="Test Cases/Smoke/TC_Jenkins2_Login_Reachable" time="0.397" classname="Test Cases/Smoke/TC_Jenkins2_Login_Reachable" status="PASSED">
+         <system-out><![CDATA[15-03-2026T14:57:12 - [TEST_CASE][PASSED] - Test Cases/Smoke/TC_Jenkins2_Login_Reachable: Test Cases/Smoke/TC_Jenkins2_Login_Reachable
+
+15-03-2026T14:57:12 - [TEST_STEP][PASSED] - return null: null]]></system-out>
+         <system-err><![CDATA[]]></system-err>
+      </testcase>
+      <system-out><![CDATA[15-03-2026T14:57:11 - [TEST_SUITE][PASSED] - Smoke: null]]></system-out>
+      <system-err><![CDATA[]]></system-err>
+   </testsuite>
+</testsuites>

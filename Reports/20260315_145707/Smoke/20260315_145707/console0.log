@@ -1,0 +1,16 @@
+2026-03-15 14:57:11.084 INFO  c.k.k.c.l.logback.LogbackConfigurator    - Logback default configuration initialized from: C:\Users\dmasl\.katalon\packages\KSE-10.4.3\configuration\org.eclipse.osgi\133\0\.cp\resources\logback\logback-execution.xml
+2026-03-15 14:57:11.096 INFO  c.k.k.c.l.logback.LogbackConfigurator    - Logback custom configuration initialized from: C:\Users\dmasl\Katalon Studio\jenkins\Include\config\log.properties
+2026-03-15 14:57:11.726 INFO  c.k.katalon.core.main.TestSuiteExecutor  - START Test Suites/Smoke
+2026-03-15 14:57:11.904 INFO  c.k.katalon.core.main.TestSuiteExecutor  - userFullName = Emergingtechnology
+2026-03-15 14:57:11.904 INFO  c.k.katalon.core.main.TestSuiteExecutor  - projectName = jenkins
+2026-03-15 14:57:11.904 INFO  c.k.katalon.core.main.TestSuiteExecutor  - hostName = dmasl - host.docker.internal
+2026-03-15 14:57:11.904 INFO  c.k.katalon.core.main.TestSuiteExecutor  - os = Windows 11 64bit
+2026-03-15 14:57:11.907 INFO  c.k.katalon.core.main.TestSuiteExecutor  - hostAddress = 10.0.0.248
+2026-03-15 14:57:11.908 INFO  c.k.katalon.core.main.TestSuiteExecutor  - katalonVersion = 10.4.3.0
+2026-03-15 14:57:12.559 INFO  c.k.katalon.core.main.TestCaseExecutor   - --------------------
+2026-03-15 14:57:12.559 INFO  c.k.katalon.core.main.TestCaseExecutor   - START Test Cases/Smoke/TC_Jenkins2_Login_Reachable
+2026-03-15 14:57:12.941 DEBUG testcase.TC_Jenkins2_Login_Reachable     - 1: return null
+2026-03-15 14:57:12.956 INFO  c.k.katalon.core.main.TestCaseExecutor   - END Test Cases/Smoke/TC_Jenkins2_Login_Reachable
+2026-03-15 14:57:13.029 INFO  c.k.katalon.core.main.TestSuiteExecutor  - --------------------
+2026-03-15 14:57:13.029 INFO  c.k.katalon.core.main.TestSuiteExecutor  - END Test Suites/Smoke
+2026-03-15 14:57:13.029 INFO  c.k.katalon.core.main.TestSuiteExecutor  - ====================
