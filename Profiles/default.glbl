@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalVariableEntity>
+  <description></description>
+  <initValue>'https://jenkins2-usw2a.awsc.leadfusion.com/login'</initValue>
+  <name>JENKINS2_URL</name>
+  <protected>false</protected>
+  <valueType>STRING</valueType>
+</GlobalVariableEntity>
