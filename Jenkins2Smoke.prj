@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<projectDescription>
-  <name>Jenkins2Smoke</name>
-  <comment></comment>
-  <projects>
-  </projects>
-  <buildSpec>
-  </buildSpec>
-  <natures>
-  </natures>
-</projectDescription>
+<Project>
+   <description></description>
+   <name>jenkins</name>
+   <tag></tag>
+   <UUID>889b7ac9-2b29-4252-88c9-ecad6c947a70</UUID>
+   <createdEdition>ENTERPRISE</createdEdition>
+   <createdVersion>10.4.3</createdVersion>
+   <freeLicense>false</freeLicense>
+   <migratedVersion>5.9.0</migratedVersion>
+   <modifiedEdition>ENTERPRISE</modifiedEdition>
+   <modifiedVersion>10.4.3</modifiedVersion>
+   <pageLoadTimeout>0</pageLoadTimeout>
+   <projectFileLocation>C:\Users\dmasl\Katalon Studio\jenkins\jenkins.prj</projectFileLocation>
+   <sourceContent>
+      <sourceFolderList>
+         <sourceFolderConfiguration>
+            <url>Include/scripts/groovy</url>
+         </sourceFolderConfiguration>
+      </sourceFolderList>
+      <systemFolderList>
+         <systemFolderConfiguration>
+            <url>Include/scripts/groovy</url>
+         </systemFolderConfiguration>
+         <systemFolderConfiguration>
+            <url>Include/features</url>
+         </systemFolderConfiguration>
+         <systemFolderConfiguration>
+            <url>Include/config</url>
+         </systemFolderConfiguration>
+      </systemFolderList>
+   </sourceContent>
+   <timeStampInProperties>false</timeStampInProperties>
+   <type>WEBUI</type>
+</Project>
