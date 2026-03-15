@@ -7,7 +7,7 @@ pipeline {
   }
 
   environment {
-    PROJECT_FILE    = "Jenkins2Smoke.prj"
+    PROJECT_FILE    = "jenkins.prj"
     TEST_SUITE_PATH = "Test Suites/Smoke"
     EXEC_PROFILE    = "default"
     BROWSER         = "Chrome"
