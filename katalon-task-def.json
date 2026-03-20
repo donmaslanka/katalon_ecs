@@ -1,0 +1,31 @@
+{
+  "family": "katalon-testing-dev-katalon",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "2048",
+  "memory": "4096",
+  "executionRoleArn": "arn:aws:iam::318798562215:role/katalon-execution-role-v4",
+  "taskRoleArn": "arn:aws:iam::318798562215:role/katalon-task-role-v4",
+  "containerDefinitions": [
+    {
+      "name": "katalon-container",
+      "image": "318798562215.dkr.ecr.us-west-2.amazonaws.com/katalon-test-runner:katalonc-01",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/katalon-testing-dev-katalon",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "linuxParameters": {
+        "initProcessEnabled": true
+      },
+      "environment": [],
+      "portMappings": [],
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ]
+}
