@@ -21,7 +21,7 @@ pipeline {
         )
         string(
             name: 'SUBNET_IDS',
-            defaultValue: 'subnet-0968b2a4486c2c297',
+            defaultValue: 'subnet-03edfae6295968a77',
             description: 'Comma-separated private subnet IDs for the Fargate task'
         )
         string(
