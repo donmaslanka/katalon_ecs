@@ -12,12 +12,12 @@ pipeline {
         string(
             name: 'TEST_SUITE',
             defaultValue: 'Test Suites/Smoke',
-            description: 'Katalon test suite path (e.g. "Test Suites/Smoke" or just "Smoke")'
+            description: 'Katalon test suite path'
         )
         string(
             name: 'KATALON_PROJECT_PATH',
-            defaultValue: '/katalon/project',
-            description: 'Path to the Katalon project inside the ECS container'
+            defaultValue: '/katalon/project/Jenkins2Smoke.prj',
+            description: 'Path to the Katalon .prj file inside the ECS container'
         )
         string(
             name: 'SUBNET_IDS',
@@ -64,8 +64,6 @@ pipeline {
                     echo "TEST_SUITE           = ${env.NORMALIZED_TEST_SUITE}"
                     echo "KATALON_PROJECT_PATH = ${params.KATALON_PROJECT_PATH}"
                     echo "SUBNET_IDS           = ${params.SUBNET_IDS}"
-                    echo "SECURITY_GROUP_IDS   = ${params.SECURITY_GROUP_IDS}"
-                    echo "ASSIGN_PUBLIC_IP     = ${params.ASSIGN_PUBLIC_IP}"
                 }
             }
         }
@@ -74,10 +72,6 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    command -v aws >/dev/null 2>&1 || {
-                        echo "ERROR: aws CLI not found on this Jenkins agent"
-                        exit 1
-                    }
                     aws --version
                     aws sts get-caller-identity
                 '''
@@ -90,16 +84,13 @@ pipeline {
                     string(credentialsId: 'katalon-api-key', variable: 'KATALON_API_KEY')
                 ]) {
                     script {
-                        def subnetList = params.SUBNET_IDS
-                            .split(',').collect { it.trim() }.findAll { it }
-                        def sgList = params.SECURITY_GROUP_IDS
-                            .split(',').collect { it.trim() }.findAll { it }
+                        def subnetList = params.SUBNET_IDS.split(',').collect { it.trim() }.findAll { it }
+                        def sgList = params.SECURITY_GROUP_IDS.split(',').collect { it.trim() }.findAll { it }
 
                         if (subnetList.isEmpty()) { error('SUBNET_IDS cannot be empty') }
                         if (sgList.isEmpty())     { error('SECURITY_GROUP_IDS cannot be empty') }
 
-                        def cleanApiKey = env.KATALON_API_KEY?.trim()
-                            ?.replaceFirst(/^apiKey=/, '')
+                        def cleanApiKey = env.KATALON_API_KEY?.trim()?.replaceFirst(/^apiKey=/, '')
 
                         def commandList = [
                             "-runMode=console",
@@ -112,44 +103,30 @@ pipeline {
                             "-statusDelay=15"
                         ]
 
-                        def overrides = [
-                            containerOverrides: [[
-                                name:    env.ECS_CONTAINER_NAME,
-                                command: commandList
-                            ]]
-                        ]
+                        def overrides = [containerOverrides: [[name: env.ECS_CONTAINER_NAME, command: commandList]]]
+                        def networkConfig = [awsvpcConfiguration: [subnets: subnetList, securityGroups: sgList, assignPublicIp: params.ASSIGN_PUBLIC_IP]]
 
-                        def networkConfig = [
-                            awsvpcConfiguration: [
-                                subnets:        subnetList,
-                                securityGroups: sgList,
-                                assignPublicIp: params.ASSIGN_PUBLIC_IP
-                            ]
-                        ]
-
-                        writeFile file: 'ecs-overrides.json',
-                                  text: groovy.json.JsonOutput.toJson(overrides)
-                        writeFile file: 'ecs-network-config.json',
-                                  text: groovy.json.JsonOutput.toJson(networkConfig)
+                        writeFile file: 'ecs-overrides.json', text: groovy.json.JsonOutput.toJson(overrides)
+                        writeFile file: 'ecs-network-config.json', text: groovy.json.JsonOutput.toJson(networkConfig)
 
                         def taskArn = sh(
                             script: """
-                                aws ecs run-task \\
-                                  --region '${env.AWS_REGION}' \\
-                                  --cluster '${env.ECS_CLUSTER}' \\
-                                  --task-definition '${env.ECS_TASK_DEFINITION}' \\
-                                  --launch-type FARGATE \\
-                                  --count 1 \\
-                                  --network-configuration file://ecs-network-config.json \\
-                                  --overrides file://ecs-overrides.json \\
-                                  --query 'tasks[0].taskArn' \\
+                                aws ecs run-task \
+                                  --region '${env.AWS_REGION}' \
+                                  --cluster '${env.ECS_CLUSTER}' \
+                                  --task-definition '${env.ECS_TASK_DEFINITION}' \
+                                  --launch-type FARGATE \
+                                  --count 1 \
+                                  --network-configuration file://ecs-network-config.json \
+                                  --overrides file://ecs-overrides.json \
+                                  --query 'tasks[0].taskArn' \
                                   --output text
                             """,
                             returnStdout: true
                         ).trim()
 
                         if (!taskArn || taskArn == 'None' || taskArn == 'null') {
-                            error('ECS run-task returned no taskArn — check IAM permissions and task definition name')
+                            error('ECS run-task returned no taskArn')
                         }
 
                         env.ECS_TASK_ARN = taskArn
@@ -157,19 +134,19 @@ pipeline {
                         echo "Started ECS task: ${env.ECS_TASK_ARN}"
 
                         sh """
-                            aws ecs wait tasks-stopped \\
-                              --region '${env.AWS_REGION}' \\
-                              --cluster '${env.ECS_CLUSTER}' \\
+                            aws ecs wait tasks-stopped \
+                              --region '${env.AWS_REGION}' \
+                              --cluster '${env.ECS_CLUSTER}' \
                               --tasks '${env.ECS_TASK_ARN}'
                         """
 
                         def exitCode = sh(
                             script: """
-                                aws ecs describe-tasks \\
-                                  --region '${env.AWS_REGION}' \\
-                                  --cluster '${env.ECS_CLUSTER}' \\
-                                  --tasks '${env.ECS_TASK_ARN}' \\
-                                  --query "tasks[0].containers[?name=='${env.ECS_CONTAINER_NAME}'].exitCode | [0]" \\
+                                aws ecs describe-tasks \
+                                  --region '${env.AWS_REGION}' \
+                                  --cluster '${env.ECS_CLUSTER}' \
+                                  --tasks '${env.ECS_TASK_ARN}' \
+                                  --query "tasks[0].containers[?name=='${env.ECS_CONTAINER_NAME}'].exitCode | [0]" \
                                   --output text
                             """,
                             returnStdout: true
@@ -177,11 +154,11 @@ pipeline {
 
                         def stopReason = sh(
                             script: """
-                                aws ecs describe-tasks \\
-                                  --region '${env.AWS_REGION}' \\
-                                  --cluster '${env.ECS_CLUSTER}' \\
-                                  --tasks '${env.ECS_TASK_ARN}' \\
-                                  --query 'tasks[0].stoppedReason' \\
+                                aws ecs describe-tasks \
+                                  --region '${env.AWS_REGION}' \
+                                  --cluster '${env.ECS_CLUSTER}' \
+                                  --tasks '${env.ECS_TASK_ARN}' \
+                                  --query 'tasks[0].stoppedReason' \
                                   --output text
                             """,
                             returnStdout: true
@@ -191,11 +168,7 @@ pipeline {
                         echo "Task stopped reason : ${stopReason}"
 
                         if (exitCode != '0') {
-                            error(
-                                "Katalon tests failed — " +
-                                "exitCode=${exitCode}, stoppedReason=${stopReason}, " +
-                                "taskArn=${env.ECS_TASK_ARN}"
-                            )
+                            error("Katalon tests failed — exitCode=${exitCode}, stoppedReason=${stopReason}, taskArn=${env.ECS_TASK_ARN}")
                         }
                     }
                 }
@@ -212,8 +185,7 @@ pipeline {
                     echo "Log stream: ecs/${env.ECS_CONTAINER_NAME}/${env.ECS_TASK_ID}"
                 }
             }
-            archiveArtifacts artifacts: 'ecs-overrides.json,ecs-network-config.json',
-                             allowEmptyArchive: true
+            archiveArtifacts artifacts: 'ecs-overrides.json,ecs-network-config.json', allowEmptyArchive: true
             cleanWs(deleteDirs: true, notFailBuild: true)
         }
     }
