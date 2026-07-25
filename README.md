@@ -41,10 +41,10 @@ ECS Fargate (katalon-testing-dev-cluster)
 | Container Name | katalon-container |
 | ECR Image | 318798562215.dkr.ecr.us-west-2.amazonaws.com/katalon-test-runner:katalonc-02 |
 | CloudWatch Log Group | /ecs/katalon-testing-dev-katalon |
-| Private Subnet (Fargate) | subnet-03edfae6295968a77 (10.0.10.0/24) |
+| Private Subnet (Fargate) | subnet-0dccc447d13149fda (lf-vpc private subnet) |
 | Public Subnet | subnet-00ba39cba9fde8ea9 (10.0.1.0/24) |
 | NAT Gateway | nat-05245ef75ddba3c59 |
-| ECS Security Group | sg-014254f1dc8168a1a |
+| ECS Security Group | sg-0d496be2f6f076857 |
 | Jenkins Agent IP | 10.0.2.172 (i-06627a43be02b44e2) |
 | Jenkins Controller | 10.0.2.80 (i-073281b4bb767be0b) |
 | Katalon Org ID | 2333388 |
@@ -103,8 +103,8 @@ Go to **Jenkins → katalon_test_1 → Build with Parameters**:
 |---|---|---|
 | `TEST_SUITE` | `Test Suites/Smoke` | Katalon test suite to run |
 | `KATALON_PROJECT_PATH` | `/katalon/project/Jenkins2Smoke.prj` | Project file path in container |
-| `SUBNET_IDS` | `subnet-03edfae6295968a77` | Private subnet — routes via NAT gateway |
-| `SECURITY_GROUP_IDS` | `sg-014254f1dc8168a1a` | ECS task security group |
+| `SUBNET_IDS` | `subnet-0dccc447d13149fda` | Private subnet — routes via NAT gateway |
+| `SECURITY_GROUP_IDS` | `sg-0d496be2f6f076857` | ECS task security group |
 | `ASSIGN_PUBLIC_IP` | `DISABLED` | Always DISABLED — NAT gateway handles egress |
 
 
@@ -198,7 +198,7 @@ Results are reported to https://testops.katalon.io under org 2333388.
   ```
 - Verify private subnet routes through NAT:
   ```powershell
-  aws ec2 describe-route-tables --region us-west-2 --filters "Name=association.subnet-id,Values=subnet-03edfae6295968a77" --query 'RouteTables[0].Routes' --output table
+  aws ec2 describe-route-tables --region us-west-2 --filters "Name=association.subnet-id,Values=subnet-0dccc447d13149fda" --query 'RouteTables[0].Routes' --output table
   ```
 
 ### Katalon exits with code 5 — tests failed
@@ -236,4 +236,4 @@ Results are reported to https://testops.katalon.io under org 2333388.
 | Private subnets | 10.0.10.0/24, 10.0.11.0/24 |
 | NAT gateway | nat-05245ef75ddba3c59 in subnet-00ba39cba9fde8ea9 |
 | EIP for NAT | 54.200.81.121 (eipalloc-025893a7f565fe045) |
-| Fargate tasks run in | subnet-03edfae6295968a77 (10.0.10.0/24) |
+| Fargate tasks run in | subnet-0dccc447d13149fda (lf-vpc private subnet) |

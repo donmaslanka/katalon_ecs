@@ -21,12 +21,12 @@ pipeline {
         )
         string(
             name: 'SUBNET_IDS',
-            defaultValue: 'subnet-03edfae6295968a77',
+            defaultValue: 'subnet-0dccc447d13149fda',
             description: 'Comma-separated private subnet IDs for the Fargate task'
         )
         string(
             name: 'SECURITY_GROUP_IDS',
-            defaultValue: 'sg-014254f1dc8168a1a',
+            defaultValue: 'sg-0d496be2f6f076857',
             description: 'Security group ID(s) for the Fargate task'
         )
         choice(
